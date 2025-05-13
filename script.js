@@ -20,9 +20,11 @@ let vidaOtaku = 100;
 // Primera batalla
 function primerabatalla() {
     alert("¡Comienza la batalla contra el Otaku nivel 2 del universo 1004!");
+    let contadorDados = 0; // Contador para bajar el nivel de EXP segùn cuantas veces se tira el dado
 
     while (vidaOtaku > 0) {
         let resultadoDado = tirarDado();
+        contadorDados=contadorDados+1; // Aumenta cada vez que se tira el dado
         alert(`Tiraste el dado: ${resultadoDado}`);
 
         if (resultadoDado % 2 === 0) {
@@ -31,15 +33,15 @@ function primerabatalla() {
                 alert(`¡Le has bajado el 20% de vida! Le queda ${vidaOtaku}%`);
             } else {
                 alert("¡Has derrotado al Otaku! 🎉");
-                exp += 50; // Suma 50 puntos de experiencia
-                alert(`¡Has ganado 50 puntos de experiencia! EXP total: ${exp}`);
+                exp = 100-contadorDados; // Suma 50 puntos de experiencia
+                alert(`¡Has ganado ${exp} puntos de experiencia!🤯`);
                 break;
             }
         } else {
             alert("¡Fallaste! No lograste reducir su vida esta vez.");
         }
 
-        confirm("Presiona 'Aceptar' para lanzar el dado nuevamente.");
+        alert("Presiona 'Aceptar' para lanzar el dado nuevamente.");
     }
 }
 
