@@ -1,18 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Don Ramón Infinite: Amor en interdimensional </title>
+    <meta charset="UTF-8" />
+    <title>Don Ramón Infinite: Amor Interdimensional</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            padding: 30px;
+        }
+
+        #app {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 8px 4px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        #historia,
+        #resultado {
+            white-space: pre-line;
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 6px;
+            margin-top: 10px;
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Don Ramón en el universo 1004: Un encuentro inesperado</h1>
-    <p>
-        En un mundo interdimensional, Don Ramón lucha contra villanos cuando, de repente, 
-        conoce a Hatsune Miku. Conforme avanzas en el juego, deberás derrotar a los enemigos y tomar decisiones 
-        que afectarán el desenlace de su relación y el desarrollo de la historia. 
-        Usa la consola para interactuar y decidir su destino.
-    </p>
+    <div id="app">
+        <h1>Don Ramón en el universo 1004</h1>
+        <p>
+            En un mundo interdimensional, Don Ramón lucha contra villanos cuando, de repente,
+            conoce a Hatsune Miku. Conforme avanzas en el juego, deberás derrotar a los enemigos
+            y tomar decisiones que afectarán el desenlace de su relación y la historia.
+        </p>
+
+        <!-- Área para mostrar el texto de historia o resultados -->
+        <div id="historia"></div>
+
+        <!-- Botones para controlar el flujo del juego -->
+        <div id="controles">
+            <button id="btnIniciarBatalla">Iniciar 1ra Batalla</button>
+            <button id="btnDecision1">Primera Decisión</button>
+            <button id="btnDecision2">Segunda Decisión</button>
+            <button id="btnSegundaBatalla">Segunda Batalla (Temach)</button>
+            <button id="btnDecision3">Tercera Decisión</button>
+            <button id="btnEvaluar">Evaluar Stats</button>
+        </div>
+
+        <div id="estadoJugador"></div>
+        
+        <!-- Resultados finales o intermedios -->
+        <div id="resultado"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
