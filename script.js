@@ -1,212 +1,186 @@
 
 // Variables globales
 let vidaOtaku = 100;
-let vidaTemach = 120;
 let puntosRomance = 0;
 let exp = 0;
-let personaje1 = "Don Ramón";
-let personaje2 = "Hatsune Miku";
+let personaje1 = "";
+let personaje2 = "Don Ramón";
+let etapa = 0;
 
-// Utilidades DOM
-const resultado = document.getElementById('resultado');
-const historia = document.getElementById('historia');
-const decisiones = document.getElementById('controles');
-
-// Tirar dado
-function tirarDado() {
-    return Math.floor(Math.random() * 12) + 1;
+function guardarNombreYContinuar() {
+    const nombreInput = document.getElementById("inputNombre").value.trim();
+    if (nombreInput === "") return;
+    personaje1 = nombreInput;
+    document.getElementById("inputNombre").style.display = "none";
+    siguienteEtapa();
 }
 
-// Guardar partida
-function guardarPartida() {
-    const partida = { vidaOtaku, vidaTemach, puntosRomance, exp };
-    localStorage.setItem('partida', JSON.stringify(partida));
-}
+function siguienteEtapa() {
+    etapa++;
+    const historia = document.getElementById("historia");
+    const controles = document.getElementById("controles");
+    const resultado = document.getElementById("resultado");
+    controles.innerHTML = "";
+    resultado.textContent = "";
 
-// Cargar partida
-function cargarPartida() {
-    const data = localStorage.getItem('partida');
-    if (data) {
-        const partida = JSON.parse(data);
-        vidaOtaku = partida.vidaOtaku;
-        vidaTemach = partida.vidaTemach;
-        puntosRomance = partida.puntosRomance;
-        exp = partida.exp;
+    switch (etapa) {
+        case 1:
+            historia.textContent = `Hola ${personaje1}. Estas son tus estadísticas iniciales:`;
+            mostrarStats();
+            controles.innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+            break;
+        case 2:
+            historia.textContent = `En un mundo interdimensional, Don Ramón lucha contra villanos cuando, de repente, conoce a Hatsune Miku. Conforme avanzas en el juego, deberás derrotar a los enemigos y tomar decisiones que afectarán el desenlace de su relación y la historia.`;
+            controles.innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+            break;
+        case 3:
+            historia.textContent = "¡Comienza la batalla contra el Otaku nivel 2 del universo 1004!";
+            controles.innerHTML = '<button onclick="lanzarDado()">Lanzar Dado</button>';
+            break;
+        case 4:
+            historia.textContent = `Después de derrotar al Otaku,\n${personaje1} sigue adentrándose en el planeta TungTungTungSahur dentro del universo 1004. Cuando escucha una voz... ¡Es LupitaTiktok malvada atacando a ${personaje2}}!`;
+            controles.innerHTML = '<button onclick="primeraDecision()">Responder</button>';
+            break;
+        case 5:
+            segundaDecision();
+            break;
+        case 6:
+            segundaBatalla();
+            break;
+        case 7:
+            terceraDecision();
+            break;
+        case 8:
+            evaluarStats();
+            break;
     }
 }
 
-function actualizarStats() {
-    resultado.textContent = `EXP: ${exp}\nRomance: ${puntosRomance}\nVida Otaku: ${vidaOtaku}\nVida Temach: ${vidaTemach}`;
-}
+function lanzarDado() {
+    const resultado = document.getElementById("resultado");
+    const dado = Math.floor(Math.random() * 6) + 1;
+    resultado.textContent += `Tiraste el dado: ${dado}\n`;
 
-// 1ra Batalla
-function iniciarBatalla() {
-    let log = `¡Comienza la batalla contra el Otaku nivel 2 del universo 1004!\n`;
-    vidaOtaku = 100;
-    let contadorDados = 0;
-
-    while (vidaOtaku > 0) {
-        const dado = tirarDado();
-        contadorDados++;
-        log += `Tiraste el dado: ${dado}\n`;
-
-        if (dado % 2 === 0) {
-            vidaOtaku -= 20;
-            if (vidaOtaku > 0) {
-                log += `¡Le bajaste 20%! Vida restante: ${vidaOtaku}%\n`;
-            } else {
-                log += "¡Has derrotado al Otaku! 🎉\n";
-                exp = 100 - contadorDados;
-                log += `¡Has ganado ${exp} puntos de experiencia!\n`;
-                guardarPartida();
-                break;
-            }
-        } else {
-            log += "Fallaste. No lograste dañar esta vez.\n";
-        }
+    if (dado % 2 === 0) {
+        vidaOtaku -= 20;
+        resultado.textContent += `¡Le has bajado el 20%! Vida restante: ${vidaOtaku}%\n`;
+    } else {
+        resultado.textContent += "Fallaste. No bajas vida esta vez.\n";
     }
 
-    historia.textContent = `Después de derrotar al Otaku,\n${personaje1} sigue adentrándose en el planeta TungTungTungSahur dentro del universo 1004. Cuando escucha una voz... ¡Es LupitaTiktok malvada atacando a ${personaje2}!`;
-    resultado.textContent = log;
+    if (vidaOtaku <= 0) {
+        exp = Math.floor(Math.random() * 50) + 50;
+        resultado.textContent += `¡Has derrotado al Otaku! 🎉 ¡Has ganado ${exp} puntos de experiencia!\n`;
+        mostrarStats();
+        document.getElementById("controles").innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+    }
 }
 
-// Primera decisión
+function mostrarStats() {
+    document.getElementById("stats").textContent = `Usuario: ${personaje1}\nVida Otaku: ${vidaOtaku}%\nExperiencia: ${exp}\nRomance: ${puntosRomance}`;
+}
+
 function primeraDecision() {
-    historia.innerHTML = `LupitaTiktok Malvada ataca. ¿Qué haces?`;
-    decisiones.innerHTML = `
-    <button onclick="decision1(true)">Proteger a Hatsune Miku</button>
-    <button onclick="decision1(false)">Ignorarla y seguir peleando</button>
-  `;
+    const historia = document.getElementById("historia");
+    historia.textContent = "¿Qué haces?";
+    const controles = document.getElementById("controles");
+    controles.innerHTML = `
+    <button onclick="eleccionDecision(true)">Proteger a ${personaje2}</button>
+    <button onclick="eleccionDecision(false)">Ignorar y seguir peleando</button>
+    `;
 }
 
-function decision1(proteger) {
-    if (proteger) {
+function eleccionDecision(decision) {
+    const historia = document.getElementById("historia");
+    if (decision) {
+        puntosRomance += 10;
         historia.textContent = `${personaje2} está sorprendida por tu valentía.`;
-        puntosRomance += 10;
     } else {
+        puntosRomance -= 5;
         historia.textContent = `${personaje2} está decepcionada. Tal vez aún no confía en ti.`;
-        puntosRomance -= 5;
     }
-    actualizarStats();
+    mostrarStats();
+    document.getElementById("controles").innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
 }
 
-// Segunda decisión
 function segundaDecision() {
-    historia.innerHTML = `Lanzas el hechizo de la bondad contra LupitaTiktok Malvada. Lo que la vuelve a hacer buena. ¿Le perdonas la vida?`;
-    decisiones.innerHTML = `
-    <button onclick="decision2(true)">Sí</button>
-    <button onclick="decision2(false)">No</button>
+    const historia = document.getElementById("historia");
+    historia.textContent = "Un androide se cruza en tu camino. ¿Intentas razonar o atacas?";
+    const controles = document.getElementById("controles");
+    controles.innerHTML = `
+    <button onclick="eleccionDecision2(true)">Razonar</button>
+    <button onclick="eleccionDecision2(false)">Atacar</button>
     `;
 }
 
-function decision2(perdonar) {
-    if (perdonar) {
-        historia.textContent = `${personaje2} te mira con respeto.`;
-        puntosRomance += 5;
+function eleccionDecision2(decision) {
+    const historia = document.getElementById("historia");
+    if (decision) {
+        exp += 10;
+        historia.textContent = "El androide accede a ayudarte y comparte información valiosa.";
     } else {
-        historia.textContent = `No muestras compasión. ¿Será que estás demasiado concentrado en ganar experiencia?`;
-        puntosRomance -= 5;
+        exp -= 5;
+        historia.textContent = "Lo derrotas, pero pierdes tiempo y energía valiosa.";
     }
-    actualizarStats();
+    mostrarStats();
+    document.getElementById("controles").innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
 }
 
-// Segunda Batalla
 function segundaBatalla() {
-    vidaTemach = 120;
-    const ataques = ["Discurso motivacional", "Golpe con libro de autoayuda", "Lluvia de críticas", "Misoginia camuflada"];
-    let log = `⚔️ Aparece el gran enemigo: TEMACH, el sensei de los simps redimidos.\n`;
-
-    while (vidaTemach > 0) {
-        const ataque = ataques[Math.floor(Math.random() * ataques.length)];
-        const dado = tirarDado();
-        log += `Temach lanza: \"${ataque}\"\n`;
-        log += `Tiras el dado... Resultado: ${dado}\n`;
-
-        if (dado > 6) {
-            let daño = dado * 2;
-            vidaTemach -= daño;
-            if (vidaTemach > 0) {
-                log += `¡Buen golpe! Le haces ${daño} de daño. Vida restante de Temach: ${vidaTemach}\n`;
-            } else {
-                log += "¡Derrotaste a Temach con sabiduría y fuerza! 🎯\n";
-                exp += 100;
-                puntosRomance += 10;
-                log += `Ganaste 100 EXP y 10 puntos de romance.\n`;
-                break;
-            }
-        } else {
-            log += "¡Temach te hace dudar de ti mismo! No logras dañar esta vez.\n";
-        }
-    }
-
-    resultado.textContent = log;
-    actualizarStats();
+    const historia = document.getElementById("historia");
+    historia.textContent = "¡La batalla final contra Temach ha comenzado!";
+    const controles = document.getElementById("controles");
+    controles.innerHTML = '<button onclick="finalBattle()">Lanzar Dado</button>';
+    vidaOtaku = 80;
+    document.getElementById("resultado").textContent = "";
 }
 
-// Tercera decisión
-function terceraDecision() {
-    historia.innerHTML = `Temach, derrotado, te ofrece unirte a su filosofía. ¿Qué eliges?`;
-    decisiones.innerHTML = `
-    <button onclick="decision3(1)">Escucharlo con respeto</button>
-    <button onclick="decision3(2)">Darle follow en TikTok</button>
-    <button onclick="decision3(3)">Ignorarlo y abrazar a Hatsune Miku</button>
-    `;
-}
+function finalBattle() {
+    const resultado = document.getElementById("resultado");
+    const dado = Math.floor(Math.random() * 6) + 1;
+    resultado.textContent += `Dado final: ${dado}\n`;
 
-function decision3(opcion) {
-    if (opcion === 1) {
-        historia.textContent = `Has ganado sabiduría. EXP +20`;
-        exp += 20;
-    } else if (opcion === 2) {
-        historia.textContent = `Temach se siente validado, pero Hatsune Miku se pone celosa.`;
-        puntosRomance -= 5;
-    } else if (opcion === 3) {
-        historia.textContent = `Miku se sonroja. ❤️ Romance +10`;
-        puntosRomance += 10;
-    }
-    actualizarStats();
-}
-
-// Evaluación final
-function evaluarStats() {
-    let final = `Primer cierre, tus stats:\nNivel de romance: ${puntosRomance}\nEXP total: ${exp}\n`;
-    if (puntosRomance >= 10) {
-        final += `¡La química entre ${personaje1} y ${personaje2} está creciendo! 💕`;
+    if (dado >= 4) {
+        vidaOtaku -= 40;
+        resultado.textContent += `¡Golpe crítico! Vida restante: ${vidaOtaku}%\n`;
     } else {
-        final += `Parece que aún hay distancia entre ${personaje1} y ${personaje2}. ❄️`;
+        resultado.textContent += "Temach esquivó el ataque.\n";
     }
-    resultado.textContent = final;
-    guardarPartida();
+
+    if (vidaOtaku <= 0) {
+        exp += 50;
+        resultado.textContent += `¡Has vencido a Temach! 🎉 Has ganado 50 puntos de experiencia.\n`;
+        mostrarStats();
+        document.getElementById("controles").innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+    }
 }
 
-// Reiniciar
-function reiniciarJuego() {
-    localStorage.removeItem('partida');
-    vidaOtaku = 100;
-    vidaTemach = 120;
-    puntosRomance = 0;
-    exp = 0;
-    resultado.textContent = 'Juego reiniciado.';
-    historia.textContent = '';
-    decisiones.innerHTML = '';
-}
-
-// Eventos
-cargarPartida();
-document.getElementById('btnIniciarBatalla').addEventListener('click', iniciarBatalla);
-document.getElementById('btnDecision1').addEventListener('click', primeraDecision);
-document.getElementById('btnDecision2').addEventListener('click', segundaDecision);
-document.getElementById('btnSegundaBatalla').addEventListener('click', segundaBatalla);
-document.getElementById('btnDecision3').addEventListener('click', terceraDecision);
-document.getElementById('btnEvaluar').addEventListener('click', evaluarStats);
-document.getElementById('btnReiniciar').addEventListener('click', reiniciarJuego);
-
-//Funciones externas a la batalla
-function actualizarStats() {
-    document.getElementById('estadoJugador').innerHTML = `
-        <strong>Vida del Otaku:</strong> ${vidaOtaku} <br>
-        <strong>EXP:</strong> ${exp} <br>
-        <strong>Puntos Romance:</strong> ${puntosRomance}
+function terceraDecision() {
+    const historia = document.getElementById("historia");
+    historia.textContent = "¿Te quedas en este universo con Don Ramón o regresas al tuyo?";
+    const controles = document.getElementById("controles");
+    controles.innerHTML = `
+    <button onclick="eleccionFinal(true)">Quedarse</button>
+    <button onclick="eleccionFinal(false)">Regresar</button>
     `;
 }
 
+function eleccionFinal(decision) {
+    const historia = document.getElementById("historia");
+    if (decision) {
+        puntosRomance += 20;
+        historia.textContent = `Te quedas con ${personaje2}. ¡Feliz para siempre! ❤️`;
+    } else {
+        exp += 10;
+        historia.textContent = `Decides regresar a tu mundo, con recuerdos valiosos.`;
+    }
+    mostrarStats();
+    document.getElementById("controles").innerHTML = '<button onclick="siguienteEtapa()">Finalizar</button>';
+}
+
+function evaluarStats() {
+    const historia = document.getElementById("historia");
+    historia.textContent = `Estadísticas finales de ${personaje1}`;
+    mostrarStats();
+    document.getElementById("controles").innerHTML = '<button onclick="location.reload()">Reiniciar</button>';
+}

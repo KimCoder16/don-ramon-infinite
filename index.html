@@ -2,74 +2,71 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Don Ramón Infinite: Amor Interdimensional</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don Ramón Aventura Interdimensional</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f0f0;
-            padding: 30px;
+            background-color: #f8b7c3;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        #app {
-            max-width: 800px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .contenedor {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
         }
 
-        h1 {
-            color: #444;
+        #stats {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            white-space: pre-line;
         }
 
         button {
             padding: 10px 20px;
-            margin: 8px 4px;
-            font-size: 1em;
+            margin-top: 10px;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
         }
 
-        #historia,
-        #resultado {
-            white-space: pre-line;
-            margin-top: 20px;
+        button:hover {
+            background-color: #ff85c1;
         }
 
-        input {
-            padding: 6px;
+        input[type="text"] {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
             margin-top: 10px;
-            width: 100%;
+            width: 80%;
         }
     </style>
 </head>
 
 <body>
-    <div id="app">
-        <h1>Don Ramón en el universo 1004</h1>
-        <p>
-            En un mundo interdimensional, Don Ramón lucha contra villanos cuando, de repente,
-            conoce a Hatsune Miku. Conforme avanzas en el juego, deberás derrotar a los enemigos
-            y tomar decisiones que afectarán el desenlace de su relación y la historia.
-        </p>
-
-        <!-- Área para mostrar el texto de historia o resultados -->
-        <div id="historia"></div>
-
-        <!-- Botones para controlar el flujo del juego -->
+    <div class="contenedor">
+        <h1 id="titulo">Don Ramón: Aventura Interdimensional</h1>
+        <div id="historia">¿Cuál es tu nombre?</div>
+        <input type="text" id="inputNombre" placeholder="Escribe tu nombre aquí...">
         <div id="controles">
-            <button id="btnIniciarBatalla">Iniciar 1ra Batalla</button>
-            <button id="btnDecision1">Primera Decisión</button>
-            <button id="btnDecision2">Segunda Decisión</button>
-            <button id="btnSegundaBatalla">Segunda Batalla (Temach)</button>
-            <button id="btnDecision3">Tercera Decisión</button>
-            <button id="btnEvaluar">Evaluar Stats</button>
+            <button onclick="guardarNombreYContinuar()">Siguiente</button>
         </div>
-
-        <div id="estadoJugador"></div>
-        
-        <!-- Resultados finales o intermedios -->
+        <div id="stats"></div>
         <div id="resultado"></div>
     </div>
 
