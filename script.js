@@ -117,7 +117,7 @@ function segundabatalla() {
             alert("¡Temach te hace dudar de ti mismo! No logras dañar esta vez.");
         }
 
-        confirm("Presiona 'Aceptar' para continuar la batalla.");
+        alert("Presiona 'Aceptar' para continuar la batalla.");
     }
 }
 
@@ -146,7 +146,7 @@ function terceraDecision() {
 terceraDecision();
 
 
-// Primer cierre
+// Primer  cierre
 function evaluarstats() {
     alert(`Primer cierre, tus stats: 
         Nivel de romance: ${puntosRomance}
