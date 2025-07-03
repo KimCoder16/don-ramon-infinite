@@ -31,6 +31,7 @@ function mostrarStats() {
 }
 
 // Para darle estructura al juego
+// Para darle estructura al juego
 function siguienteEtapa() {
     etapa = etapa + 1;
     const historia = document.getElementById("historia");
