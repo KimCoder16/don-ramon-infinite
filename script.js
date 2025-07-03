@@ -26,9 +26,18 @@ function guardarEnLocalStorage() {
 }
 
 function mostrarStats() {
-    document.getElementById("stats").innerHTML = `Usuario: ${personaje1}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Experiencia: ${exp}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Romance: ${puntosRomance}`;
+    document.getElementById("stats").innerHTML = `
+        <span>👤 ${personaje1}</span> &nbsp;&nbsp;
+        <span>⭐ Exp: ${exp}</span> &nbsp;&nbsp;
+        <span>❤️ Romance: ${puntosRomance}</span>
+    `;
     guardarEnLocalStorage();
 }
+
+function mostrarImagen(url) {
+    document.getElementById("imagenEscena").innerHTML = `<img src="${url}" style="max-width:100%; border-radius: 15px;">`;
+}
+
 
 // Para darle estructura al juego
 // Para darle estructura al juego
@@ -41,19 +50,64 @@ function siguienteEtapa() {
     resultado.textContent = "";
 
     if (etapa === 1) {
-        historia.textContent = `Te damos la bienvenida, ${personaje1}. Estas son tus estadísticas iniciales ☝️`;
-        mostrarStats();
-        controles.innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
-    } else if (etapa === 2) {
-        historia.textContent = `Don Ramón está peleando contra los otakus del universo 1004...`;
-        controles.innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
-    } else if (etapa === 3) {
-        historia.textContent = "Cuando se encuentra con un Otaku de nivel 2 que le lanza un hechizo hediondo... ¡Lanza el dado para derrotarlo!";
-        controles.innerHTML = '<button onclick="lanzarDado()">Lanzar Dado</button>';
-    } else if (etapa === 4) {
+        Swal.fire({
+            title: `¡Bienvenido, ${personaje1}!`,
+            text: 'Estas son tus estadísticas iniciales ☝️',
+            icon: 'info',
+            confirmButtonText: 'Ver stats'
+        }).then(() => {
+            historia.textContent = `Te damos la bienvenida, ${personaje1}. Estas son tus estadísticas iniciales ☝️`;
+            mostrarStats();
+            controles.innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+        });
+        return;
+    }
+
+    if (etapa === 2) {
+        Swal.fire({
+            title: '¡Batalla interdimensional!',
+            text: 'Don Ramón está peleando contra los otakus del universo 1004...',
+            imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVVD075z2wLPuKwlhHYcVhNWS9bSMe_V2xKw&s', // imagenn
+            imageWidth: 300,
+            confirmButtonText: 'Continuar'
+        }).then(() => {
+            historia.textContent = `Don Ramón está peleando contra los otakus del universo 1004...`;
+            controles.innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+        });
+        return;
+    }
+
+    if (etapa === 3) {
+        Swal.fire({
+            title: '¡Hechizo Otaku!',
+            text: 'Un Otaku de nivel 2 lanza un hechizo hediondo... ¡Lanza el dado para defenderte!',
+            
+            imageUrl: 'https://cdna.artstation.com/p/assets/images/images/035/602/008/large/rigviel-art-sailor-zakel.jpg?1615393848', // imagenn
+            icon: 'warning',
+            confirmButtonText: 'Lanzar dado'
+        }).then(() => {
+            historia.textContent = "Cuando se encuentra con un Otaku de nivel 2 que le lanza un hechizo hediondo... ¡Lanza el dado para derrotarlo!";
+            controles.innerHTML = '<button id="btnDado" onclick="lanzarDado()">Lanzar Dado</button>';
+            anime({
+                targets: '#btnDado',
+                scale: [0.9, 1.1],
+                duration: 800,
+                easing: 'easeInOutSine',
+                direction: 'alternate',
+                loop: true
+            });
+
+        });
+        return;
+    }
+
+    if (etapa === 4) {
         historia.textContent = `Después de derrotar al Otaku, Don Ramon sigue explorando...`;
         controles.innerHTML = '<button onclick="primeraDecision()">Responder</button>';
-    } else if (etapa === 5) {
+    }
+
+    //siguientes etapads directas
+    if (etapa === 5) {
         segundaDecision();
     } else if (etapa === 6) {
         segundaBatalla();
@@ -63,6 +117,7 @@ function siguienteEtapa() {
         evaluarStats();
     }
 }
+
 
 function lanzarDado() {
     const resultado = document.getElementById("resultado");
@@ -99,15 +154,20 @@ function eleccionDecision(decision) {
     if (decision) {
         puntosRomance += 10;
         historia.textContent = `${personaje2} está sorprendida por tu valentía.`;
+        mostrarImagen("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzSjyHyjxJ27MzV0ifwtXaiJCfNWZNQ0xeZw&s"); // imagenn
     } else {
         puntosRomance -= 5;
         historia.textContent = `${personaje2} está decepcionada. Tal vez aún no confía en ti.`;
+        mostrarImagen("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzSjyHyjxJ27MzV0ifwtXaiJCfNWZNQ0xeZw&s"); // imagenn
+
     }
     mostrarStats();
     document.getElementById("controles").innerHTML = '<button onclick="siguienteEtapa()">Siguiente</button>';
+    
 }
 
 function segundaDecision() {
+    mostrarImagen("");
     const historia = document.getElementById("historia");
     historia.textContent = "Un cienciólogo se cruza en tu camino. ¿Intentas razonar o atacas?";
     const controles = document.getElementById("controles");
@@ -188,3 +248,11 @@ function evaluarStats() {
     mostrarStats();
     document.getElementById("controles").innerHTML = '<button onclick="location.reload()">Reiniciar</button>';
 }
+
+//el json
+let enemigos = [];
+
+fetch("enemigos.json")
+    .then(res => res.json())
+    .then(data => enemigos = data)
+    .catch(error => console.error("Error cargando enemigos:", error));
